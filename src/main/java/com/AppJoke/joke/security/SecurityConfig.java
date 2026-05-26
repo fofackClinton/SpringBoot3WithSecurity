@@ -13,28 +13,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
+	@Autowired
 	AuthenticationManager authMgr;
-	
-	
-	
-	@Bean
-	SecurityFilterChain filterChain (HttpSecurity http) throws Exception
-	{
-        // pour dire à sprinf quu'on ne gère pas les sessions
-		http.sessionManagement( session -> 
-		session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-		
-		.csrf( csrf -> csrf.disable()) 
-		
-		.authorizeHttpRequests( requests -> requests
-				.requestMatchers("/login").permitAll()
-				.anyRequest().authenticated() )
-		//ajout du filtre
-		.addFilterBefore(new JWTAuthenticationFilter(authMgr), 
-				UsernamePasswordAuthenticationFilter.class);
 
-	return http.build();
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		// pour dire à sprinf quu'on ne gère pas les sessions
+		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+				.csrf(csrf -> csrf.disable())
+
+				.authorizeHttpRequests(requests -> requests
+						.requestMatchers("/login").permitAll()
+						.anyRequest().authenticated())
+				// ajout du filtre pour créé le jwt
+				.addFilterBefore(new JWTAuthenticationFilter(authMgr),
+						UsernamePasswordAuthenticationFilter.class)
+				// filtre pour décodé le token lire le user et les roles
+				.addFilterBefore(new JWTAutorizationFilter(),
+						UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
 	}
-	
+
 }
