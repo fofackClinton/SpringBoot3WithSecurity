@@ -1,5 +1,7 @@
 package com.AppJoke.joke.service;
 
+import java.util.List;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,11 @@ public class UserServiceImpl implements UserService {
 
         usr.getRoles().add(r);
         return usr;
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
 }

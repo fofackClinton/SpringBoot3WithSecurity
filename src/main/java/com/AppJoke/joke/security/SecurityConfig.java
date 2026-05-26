@@ -25,6 +25,7 @@ public class SecurityConfig {
 
 				.authorizeHttpRequests(requests -> requests
 						.requestMatchers("/login").permitAll()
+						.requestMatchers("/all").hasAuthority("ADMIN")
 						.anyRequest().authenticated())
 				// ajout du filtre pour créé le jwt
 				.addFilterBefore(new JWTAuthenticationFilter(authMgr),

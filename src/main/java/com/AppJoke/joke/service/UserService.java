@@ -1,5 +1,7 @@
 package com.AppJoke.joke.service;
 
+import java.util.List;
+
 import com.AppJoke.joke.entities.Role;
 import com.AppJoke.joke.entities.User;
 
@@ -13,5 +15,7 @@ public interface UserService {
     Role addRole(Role role);
 
     User addRoleToUser(String username, String rolename);
+
+    List<User> findAllUsers();
 
 }
